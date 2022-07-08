@@ -1,0 +1,80 @@
+<html>
+	<head>
+		<title>Add a target</title>
+	</head>
+	<body>
+	
+<!-- Navigation bar -->
+		
+		<h1>European Space Agency</h1>
+		<hr>
+		<p>Choose an option below: </p>
+		<a href="index.php">Home page</a> |
+		<a href="add_astronaut.php">Add an astronaut</a> |
+		<a href="add_mission.php">Add a mission</a> |
+		<a href="add_target.php">Add a target</a> |
+		<a href="see_astronauts.php">See all astronauts</a> |
+		<a href="see_missions.php">See all missions</a> |
+		<a href="see_targets.php">See all targets</a> |
+		<hr>
+		
+<!-- Form to receive target name, first mission date, target type and number of missions -->
+		
+		<h3>Add new target</h3>
+		<form method="post" action="add_target.php">
+			<label>Target name</label><br>
+			<input type="text" name="target_name"><br>
+			
+			<label>First mission date</label><br>
+			<input type="date" name="first_mission"><br>
+			
+			<label>Target Type</label><br>
+			<input type="text" name="target_type"><br>
+			
+			<label>Number of missions</label><br>
+			<input type="text" name="no_missions"><br>
+			
+			<input type="submit" name="submit">
+		</form>
+		
+
+		
+<!-- PHP script to connect to sql database -->
+		
+		<?php
+			$host = 'localhost';
+			$username = 'root';
+			$password = '';
+			$database_name = 'esa';
+			
+			$link = mysqli_connect($host, $username, $password, $database_name);
+			
+			if ($link === false) {
+				die ('Error: could not connect ');
+			} else {
+				echo ('Succesfully connected ');
+			}
+		
+// PHP script to insert values from the form above into database (esa) table (target) columns (name, first mission date, target type and number of missions)
+		
+		if (isset($_POST['submit'])) {
+
+			$target_name = $_POST['target_name'];
+			$first_mission = $_POST['first_mission'];
+			$target_type = $_POST['target_type'];
+			$no_missions = $_POST['no_missions'];
+			
+			$sql = "INSERT INTO target (name, first_mission, target_type, no_missions) VALUES ('$target_name', '$first_mission', '$target_type', '$no_missions')";
+			
+// Validation that mission has been added
+
+			if (mysqli_query($link, $sql)) {
+				echo ("Target has been added");
+			} else {
+				echo ("Error: problem adding mission");
+			}
+		}
+			mysqli_close($link);
+		?>
+	</body>
+</html>
